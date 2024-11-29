@@ -1,0 +1,65 @@
+{% extends 'gas_utility/base.html' %}
+
+{% block title %}Home - Gas Utility Service Portal{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="hero-section">
+        <h1>Welcome to Gas Utility Service Portal</h1>
+        <p class="lead">Your one-stop solution for gas utility service requests and support</p>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Report Gas Leak</h3>
+            <p>Emergency gas leak reporting with immediate response</p>
+            <a href="{% url 'submit_request' %}" class="btn btn-primary">Report Now</a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-file-invoice"></i>
+            <h3>Billing Issues</h3>
+            <p>Get help with billing queries and payment issues</p>
+            <a href="{% url 'submit_request' %}" class="btn btn-primary">Submit Query</a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-plug"></i>
+            <h3>New Connection</h3>
+            <p>Apply for a new gas connection for your property</p>
+            <a href="{% url 'submit_request' %}" class="btn btn-primary">Apply Now</a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-tools"></i>
+            <h3>Maintenance</h3>
+            <p>Schedule maintenance or report technical issues</p>
+            <a href="{% url 'submit_request' %}" class="btn btn-primary">Schedule</a>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <a href="{% url 'submit_request' %}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> New Request
+                </a>
+                <a href="{% url 'track_requests' %}" class="btn btn-secondary">
+                    <i class="fas fa-list-check"></i> Track Requests
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="cta-section">
+            <h2>Get Started</h2>
+            <p>Create an account to submit and track your service requests</p>
+            <div class="cta-buttons">
+                <a href="{% url 'register' %}" class="btn btn-primary">Sign Up Now</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Sign In</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

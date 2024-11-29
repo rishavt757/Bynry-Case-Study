@@ -1,0 +1,73 @@
+{% extends 'gas_utility/base.html' %}
+
+{% block title %}Update Request Status{% endblock %}
+
+{% block content %}
+<div class="update-status-container">
+    <div class="status-card">
+        <div class="card-header">
+            <h2><i class="fas fa-edit"></i> Update Request Status</h2>
+        </div>
+        <div class="card-body">
+            <!-- Request Details -->
+            <div class="request-details">
+                <h3>{{ service_request.title }}</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="label"><i class="fas fa-tag"></i> Category:</span>
+                        <span class="value">{{ service_request.category }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label"><i class="fas fa-user"></i> Customer:</span>
+                        <span class="value">{{ service_request.user.username }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label"><i class="fas fa-clock"></i> Current Status:</span>
+                        <span class="value status-badge {{ service_request.status|lower }}">{{ service_request.status }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label"><i class="fas fa-calendar"></i> Created:</span>
+                        <span class="value">{{ service_request.created_at|date:"M d, Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Form -->
+            <form method="post" class="status-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="status"><i class="fas fa-tasks"></i> New Status:</label>
+                    <select name="status" id="status" class="form-control" required>
+                        <option value="">Select Status</option>
+                        {% for status_choice in status_choices %}
+                            <option value="{{ status_choice.0 }}" {% if service_request.status == status_choice.0 %}selected{% endif %}>
+                                {{ status_choice.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="note"><i class="fas fa-comment"></i> Note:</label>
+                    <textarea name="note" id="note" class="form-control" rows="3" placeholder="Add any notes about this status update"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="time_spent"><i class="fas fa-stopwatch"></i> Time Spent (minutes):</label>
+                    <input type="number" name="time_spent" id="time_spent" class="form-control" min="0" placeholder="Enter time spent in minutes">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Status
+                    </button>
+                    <a href="{% url 'support:dashboard' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

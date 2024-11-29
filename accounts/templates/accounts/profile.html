@@ -1,0 +1,16 @@
+{% extends 'gas_utility/base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Profile</h2>
+    <div class="profile-info">
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Contact Number: {{ user.contact_number }}</p>
+        <p>Address: {{ user.address }}</p>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'gas_utility/base.html' %}
+
+{% block title %}Register - Gas Utility{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Create Account</h1>
+            <p class="auth-subtitle">Join Gas Utility Service Portal</p>
+        </div>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Please correct the errors below.
+            </div>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    <i class="fas fa-user"></i> Username
+                </label>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.contact_number.id_for_label }}" class="form-label">
+                    <i class="fas fa-phone"></i> Contact Number
+                </label>
+                {{ form.contact_number }}
+                {% for error in form.contact_number.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.address.id_for_label }}" class="form-label">
+                    <i class="fas fa-map-marker-alt"></i> Address
+                </label>
+                {{ form.address }}
+                {% for error in form.address.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                    <i class="fas fa-lock"></i> Password
+                </label>
+                {{ form.password1 }}
+                {% for error in form.password1.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                    <i class="fas fa-lock"></i> Confirm Password
+                </label>
+                {{ form.password2 }}
+                {% for error in form.password2.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

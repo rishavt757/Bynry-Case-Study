@@ -1,0 +1,274 @@
+{% extends 'gas_utility/base.html' %}
+
+{% block title %}Support Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1>Support Dashboard</h1>
+        {% if user.support_staff %}
+            <p>Department: {{ user.support_staff.department }} (Level {{ user.support_staff.support_level }})</p>
+        {% endif %}
+    </div>
+
+    <!-- Status Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon pending">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.pending }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon assigned">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.assigned }}</h3>
+                <p>Assigned</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon progress">
+                <i class="fas fa-spinner"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.in_progress }}</h3>
+                <p>In Progress</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon on-hold">
+                <i class="fas fa-pause-circle"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.on_hold }}</h3>
+                <p>On Hold</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon resolved">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.resolved }}</h3>
+                <p>Resolved</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon closed">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.closed }}</h3>
+                <p>Closed</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <i class="fas fa-list"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ status_counts.total }}</h3>
+                <p>Total</p>
+            </div>
+        </div>
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="dashboard-grid">
+        <!-- Pending Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-clock"></i> Pending Requests</h2>
+            </div>
+            <div class="card-body">
+                {% if pending_requests %}
+                    <div class="request-list">
+                        {% for request in pending_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.created_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-primary">
+                                        <i class="fas fa-edit"></i> Update
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No pending requests</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Assigned Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-user-check"></i> Assigned</h2>
+            </div>
+            <div class="card-body">
+                {% if assigned_requests %}
+                    <div class="request-list">
+                        {% for request in assigned_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.updated_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-info">
+                                        <i class="fas fa-play"></i> Start Work
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No assigned requests</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- In Progress Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-spinner"></i> In Progress</h2>
+            </div>
+            <div class="card-body">
+                {% if in_progress_requests %}
+                    <div class="request-list">
+                        {% for request in in_progress_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.started_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-primary">
+                                        <i class="fas fa-edit"></i> Update
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No requests in progress</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- On Hold Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-pause-circle"></i> On Hold</h2>
+            </div>
+            <div class="card-body">
+                {% if on_hold_requests %}
+                    <div class="request-list">
+                        {% for request in on_hold_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.updated_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-warning">
+                                        <i class="fas fa-play-circle"></i> Resume
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No requests on hold</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Resolved Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-check-circle"></i> Resolved</h2>
+            </div>
+            <div class="card-body">
+                {% if resolved_requests %}
+                    <div class="request-list">
+                        {% for request in resolved_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.completed_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-secondary">
+                                        <i class="fas fa-history"></i> Reopen
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No resolved requests</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Closed Requests -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><i class="fas fa-lock"></i> Closed</h2>
+            </div>
+            <div class="card-body">
+                {% if closed_requests %}
+                    <div class="request-list">
+                        {% for request in closed_requests %}
+                            <div class="request-item">
+                                <div class="request-info">
+                                    <h4>{{ request.title }}</h4>
+                                    <p class="category"><i class="fas fa-tag"></i> {{ request.category }}</p>
+                                    <p class="customer"><i class="fas fa-user"></i> {{ request.user.username }}</p>
+                                    <p class="timestamp"><i class="fas fa-calendar"></i> {{ request.completed_at|date:"M d, Y H:i" }}</p>
+                                </div>
+                                <div class="request-actions">
+                                    <a href="{% url 'support:update_request_status' request.id %}" class="btn btn-dark">
+                                        <i class="fas fa-folder-open"></i> View
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-requests">No closed requests</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
