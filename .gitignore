@@ -11,6 +11,17 @@ venv/
 */migrations/*
 !*/migrations/__init__.py
 
+db.sqlite3
+/media/
+
+# Virtual environment
+venv/
+.env/
+
+# IDE files
+*.vscode/
+*.idea/
+
 # Ignore IDE/project-specific files
 .vscode/
 .idea/
@@ -31,3 +42,9 @@ Thumbs.db
 *.egg-info/
 dist/
 build/
+
+# text file
+.txt
+
+*.pyc
+__pycache__/
