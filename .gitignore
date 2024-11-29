@@ -1,21 +1,33 @@
-*.pyc
+# Ignore Python bytecode and caches
 __pycache__/
+*.py[cod]
+*$py.class
 
-# Environment variable(s)
-.env
-
-# Django
-db.sqlite3
-/media/
-staticfiles/
-
-# Virtual environment
+# Ignore virtual environment
+env/
 venv/
-.env/
 
-# IDE files
-*.vscode/
-*.idea/
+# Ignore migrations except __init__.py
+*/migrations/*
+!*/migrations/__init__.py
 
-# Text Files
-*.txt/
+# Ignore IDE/project-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+*.out
+
+# Ignore compiled code and unnecessary artifacts
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
